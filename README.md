@@ -1,6 +1,6 @@
-# DA401 Capstone Project - [Your Name]
+# DA401 Capstone Project - Seo
 
-## Project Title
+## DA Capstone
 (Write a clear, descriptive title for your project.)
 
 ## Research Question
