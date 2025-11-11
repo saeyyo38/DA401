@@ -1,19 +1,19 @@
 # DA401 Capstone Project - Seo
 
 ## DA Capstone
-(Write a clear, descriptive title for your project.)
+Analyzing the effect of the 2022 FIA regulations on race dynamics using Machine Learning  
 
 ## Research Question
-What question are you trying to answer?
+What are the distinguishing characteristics of the races that occurred after a major regulatory change compared to those that occurred before?
 
 ## Data Source
-Where is your data coming from? 
+My data will be pulled and aggregated from FastF1 API 
 
 ## Methods
-Which methods or models will you use? 
+Generalized Linear Mixed Models and Random Forrest Classification
 
 ## Expected Timeline
-What do you expect to produce every week?
+13 weeks total
 
 ## Google Drive 
 [Google Drive link if you have any]
