@@ -1,0 +1,93 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r, echo=TRUE}
+#load libraries
+library(lme4)
+library(lmerTest)     
+library(performance)  
+library(DHARMa)       
+```
+
+```{r, echo=TRUE}
+df <- read.csv("race_data_for_rf.csv")
+```
+
+```{r}
+#encode categorical vals
+df$Driver <- factor(df$Driver)
+df$RaceName <- factor(df$RaceName)
+df$FinalStintCompound <- factor(df$FinalStintCompound)
+
+#normalize selected numeric vars 
+scale_vars <- c("TyreLife", "Mean_AirTemp", "Mean_TrackTemp", "Mean_WindSpeed", "Mean_Humidity")
+df <- df %>%
+  mutate(across(all_of(scale_vars), scale))
+```
+Fixed Effects:
+  TyreLife + C(Compound) + AirTemp + Position + RegulationEra + SpeedST + IsOvertake
+Interaction Term:
+  RegulationEra * SpeedST (Equivalent to: RegulationEra + SpeedST + RegulationEra:SpeedST)
+Random Effects:
+  (1 | Driver) - Random Intercept for Driver
+  (1 | Race_ID) - Random Intercept for Race (i.e., Track)
+
+```{r, echo=TRUE}
+# Create a unique Race ID by combining Year and RaceName for the second random effect
+df$Race_ID <- as.factor(paste(df$Year, df$RaceName, sep = "_"))
+```
+
+
+```{r}
+#set formula
+lmem_formula <- LapTime ~ TyreLife + FinalStintCompound + Mean_AirTemp + FinalPosition + Overtakes_Per_Race + RegulationEra * Mean_SpeedST + (1 | Driver) + (1 | Race_ID) 
+
+#run model & get summary
+lmem_model <- lmer(lmem_formula, data = df)
+summary(lmem_model)
+```
+
+
+```{r}
+model_no_driver <- lmer(
+  LapTime ~ TyreLife + FinalStintCompound + Mean_AirTemp + FinalPosition + Overtakes_Per_Race + RegulationEra * Mean_SpeedST + (1 | Race_ID),
+  data = df,
+  REML = FALSE
+)
+
+model_driver <- lmer(
+  LapTime ~ TyreLife + FinalStintCompound + Mean_AirTemp + FinalPosition + Overtakes_Per_Race + RegulationEra * Mean_SpeedST + (1 | Driver) + (1 | Race_ID),
+  data = df,
+  REML = FALSE
+)
+
+model_no_track <- lmer(
+  LapTime ~ TyreLife + FinalStintCompound + Mean_AirTemp + FinalPosition + Overtakes_Per_Race + RegulationEra * Mean_SpeedST + (1 | Driver),
+  data = df,
+  REML = FALSE
+)
+
+#run anova on two models
+print(anova(model_no_driver, model_driver))
+print(anova(model_no_track, model_driver))
+```
+
+
+```{r}
+#get icc
+icc(lmem_model)
+
+#studentized residuals
+res <- rstudent(lmem_model)
+plot(res)
+
+#residual diagnostics
+sim <- simulateResiduals(lmem_model)
+plot(sim)
+
+#multicollinearity
+check_collinearity(lmem_model)
+```
