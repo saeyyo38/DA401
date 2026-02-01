@@ -10,13 +10,11 @@ What are the distinguishing characteristics of the races that occurred after a m
 Race data will be obtained using FasF1 API. 
 
 ## Methods
-Linear Mixed-Effects Models and Random Forrest Classification. 
+Linear Mixed-Effects Models and Random Forrest Classification using R and Python.
 
 ## Expected Timeline
 13 weeks total
 
-## Google Drive 
-[Google Drive link if you have any]
 
 ## Repository Structure
 - `code/`: All analysis scripts or notebooks
