@@ -1,3 +1,3 @@
 # Figures Folder
 
-This folder contains figures files for your project.
+This folder contains all figures for the project. 
