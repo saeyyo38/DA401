@@ -1,3 +1,3 @@
 # Data Folder
 
-This folder contains data files for your project.
+This folder contains all data files for used.
